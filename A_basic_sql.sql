@@ -2,7 +2,7 @@ CREATE DATABASE college;
 CREATE DATABASE IF NOT EXISTS college;
 
 CREATE DATABASE sample_db;
-ALTER DATABASE sample_db READ ONLY =1; -- edit kora jabe na 
+-- ALTER DATABASE sample_db READ ONLY =1;		 -- edit kora jabe na 
 DROP DATABASE IF EXISTS sample_db;
 
 USE college;
@@ -26,9 +26,31 @@ VALUES
 (3,"Joy",80,"A","Rajshahi"),
 (4,"Rini",38,"F","Chuadanga"),
 (5,"Aklima",70,"B","Rajshahi"),
-(6,"Jabbair",66,"C","Rajshahi"),
+(6,"Jabbar",66,"C","Rajshahi"),
 (7,"Badhon",96,"A","Dhaka");
 
+ALTER TABLE student
+ADD COLUMN age INT NOT NULL DEFAULT 20;
+
+UPDATE student
+SET age = CASE rollno
+    WHEN 1 THEN 26
+    WHEN 2 THEN 26
+    WHEN 3 THEN 25
+    WHEN 4 THEN 23
+    WHEN 5 THEN 49
+    WHEN 6 THEN 58
+    WHEN 7 THEN 28
+END;
+
+ALTER TABLE student
+DROP COLUMN age;
+
+ALTER TABLE student
+MODIFY COLUMN age VARCHAR(3) ;
+
+ALTER TABLE student
+CHANGE age student_age int;
 
 SELECT *
 FROM student;
@@ -92,8 +114,7 @@ SELECT 5 ^ 3;
 
 -- 80 er besi koto jon paise seta dekhte
 SELECT max(marks),min(marks),avg(marks), count(*) 	
-FROM student
-WHERE marks >= 80;
+FROM student;
 
 -- exect count ber korbe  mark er opor base kore  GROUP BY kore count ber korbe
 SELECT marks, count(*)  
@@ -143,8 +164,6 @@ VALUES
 (9, "Mou", "Offline", "Rajshahi"),
 (10, "Farhan", "Phone", "Dhaka");
 
-
-
 SELECT *
 FROM order_table;
 
@@ -161,9 +180,9 @@ ORDER BY grade;
 
 -- Having Clause
 
-SELECT city, count(name)
+SELECT city, count(marks)
 FROM student 
-WHERE grade = "A"
+WHERE grade = "A" 
 GROUP BY city 
 HAVING max(marks) >= 80
 ORDER BY city DESC;
@@ -183,21 +202,65 @@ WHERE marks BETWEEN 70 AND 79;
 SELECT *
 FROM student;
 
+-- DELETE
+
+INSERT INTO student 
+VALUES(8,"abc", 10, "F", "Homeless");
+
+DELETE FROM student
+WHERE marks <33;
 
 
 
+START TRANSACTION;
 
+DELETE FROM student
+WHERE marks < 50;
 
+-- ভুল হয়ে গেছে! ফিরিয়ে আনো
+ROLLBACK;
 
+-- এখন দেখো data ফিরে এসেছে
+SELECT * FROM student;
 
+-- New table
 
+CREATE TABLE dept(
+d_id INT PRIMARY KEY,
+d_name varchar(50)
+);
 
+INSERT into dept
+VALUES
+(101,"CSE"),
+(102,"EEE"),
+(103,"ICT");
 
+CREATE TABLE teacher(
+id INT PRIMARY KEY,
+name VARCHAR(50),
+dept_id int,
+FOREIGN KEY (dept_id) REFERENCES dept(d_id)
+ON UPDATE CASCADE
+ON DELETE CASCADE
+);
 
+DROP TABLE teacher;
 
+INSERT INTO teacher (id, name, dept_id)
+VALUES
+(1, "Dr. Rahman", 101),
+(2, "Prof. Karim", 102),
+(3, "Ms. Tania", 101),
+(4, "Mr. Sabbir", 103),
+(5, "Dr. Priya", 102);
 
+SELECT *
+FROM dept;
 
+SELECT *
+FROM teacher;
 
-
-
-
+UPDATE dept
+SET d_id = 105
+WHERE d_id =103;
