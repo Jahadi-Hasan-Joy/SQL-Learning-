@@ -1,65 +1,54 @@
 -- Where Clause
 
-select * 
-from employee_salary
-where first_name = 'Leslie';
+SELECT * 
+FROM employee_salary
+WHERE first_name = 'Leslie';
 
-select * 
-from employee_salary
-where salary <= 50000;
+SELECT * 
+FROM employee_salary
+WHERE salary >= 50000;
 
+SELECT *
+FROM employee_demographics
+WHERE gender != 'female';
 
-select *
-from employee_demographics
-where gender != 'female';
-
-select *
-from employee_demographics
-where birth_date > '1985-07-26';
-
-
+SELECT *
+FROM employee_demographics
+WHERE birth_date > '1985-01-01';
 
 
 -- AND OR NOT -- Logical Operators
 
--- And
-select *
-from employee_demographics
-where birth_date > '1985-01-01'
-and gender = 'male';
+SELECT *
+FROM employee_demographics
+WHERE birth_date > '1985-01-01' AND gender = 'male';
 
+SELECT *
+FROM employee_demographics
+WHERE birth_date > '1985-01-01' OR gender = 'male';
 
--- OR
-select *
-from employee_demographics
-where birth_date > '1985-01-01'
-or gender = 'male';
+SELECT *
+FROM employee_demographics
+WHERE birth_date > '1985-01-01' AND NOT gender = 'male';
 
--- NOT
-select *
-from employee_demographics
-where birth_date > '1985-01-01'
-or not gender = 'male';
-
-
--- order PRMDAS
--- OR
-select *
-from employee_demographics
-where (first_name = 'Tom' and age = 36) or age > 60;
+SELECT *
+FROM employee_demographics
+WHERE (first_name = 'Tom' AND age = 36) OR age > 60;
 
 
 -- LIKE
-select *
-from employee_demographics
-where first_name like 'a%'; 
+SELECT *
+FROM employee_demographics
+WHERE first_name LIKE 'a%'; 
 
  -- before the 'a%' have to match
  -- inside the '%a%' have to match
  -- after the '%a' have to match
  
-select *
-from employee_demographics
-where first_name like 'a__'; 
+SELECT *
+FROM employee_demographics
+WHERE first_name LIKE 'a__'; 
  -- after the 'a__' have to 2 charecter
-
+SELECT *
+FROM employee_demographics
+WHERE first_name LIKE 'a__%';

@@ -1,37 +1,27 @@
 -- Group By
 
-select *
-from employee_demographics;
+SELECT *
+FROM employee_demographics;
 
-select gender, avg (age), max(age), min(age), count(age)
-from employee_demographics
-group by gender;
+SELECT gender, AVG (age), MAX(age), MIN(age), COUNT(age)
+FROM employee_demographics
+GROUP BY gender;
 
-select occupation, salary
-from employee_salary
-group by occupation, salary;
+SELECT occupation, salary
+FROM employee_salary
+GROUP BY occupation, salary;
+
 
 -- Order By
 
-select * 
-from employee_demographics
-order by first_name asc;
+SELECT * 
+FROM employee_demographics
+ORDER BY  employee_id ASC;
 
-select * 
-from employee_demographics
-order by first_name desc;
+SELECT * 
+FROM employee_demographics
+ORDER BY age DESC;
 
-select * 
-from employee_demographics
-order by gender, age;
-
-
-
-
-
-
-
-
-
-
-
+SELECT *
+FROM employee_demographics
+ORDER BY gender, age DESC;
