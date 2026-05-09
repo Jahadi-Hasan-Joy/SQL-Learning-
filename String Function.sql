@@ -20,7 +20,7 @@ substring(first_name,3,2),	-- start at 3rd position and show 2 character
 substring(birth_date,6,2) as birth_month
 FROM employee_demographics;
 
-SELECT first_name, replace(first_name,'a','Z') as chane_name
+SELECT first_name, replace(first_name,'A','Z') as chane_name
 FROM employee_demographics;
 
 SELECT locate('y', 'joy');
@@ -32,31 +32,3 @@ FROM employee_demographics;
 SELECT first_name,last_name,
 concat(first_name,' ',last_name) as full_name
 FROM employee_demographics;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
