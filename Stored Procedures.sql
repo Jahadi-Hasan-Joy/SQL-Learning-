@@ -33,20 +33,3 @@ END $$
 DELIMITER ;
 
 CALL large_salaries4(1);	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

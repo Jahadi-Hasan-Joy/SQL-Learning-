@@ -25,20 +25,3 @@ DENSE_RANK() OVER(PARTITION BY gender ORDER BY salary DESC) as Dense_rank_num
 FROM employee_demographics as dem
 JOIN employee_salary as sal
 	on dem.employee_id = sal.employee_id;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

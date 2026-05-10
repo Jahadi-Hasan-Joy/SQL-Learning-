@@ -26,13 +26,3 @@ FROM employee_salary;
 
 SELECT *
 FROM parks_departments;
-
-
-
-
-
-
-
-
-
-
