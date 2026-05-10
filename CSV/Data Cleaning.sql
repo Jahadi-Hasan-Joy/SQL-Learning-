@@ -10,7 +10,7 @@ FROM layoffs;
 -- 1. Remove Duplicates
 -- 2. Standardize the Data
 -- 3. Null VALUES or blank VALUES
--- 4. Remove Any Colmuns
+-- 4. Remove Any Colmuns or rows 
 
 CREATE TABLE layoffs_staging
 LIKE layoffs;
@@ -22,18 +22,18 @@ FROM layoffs;
 SELECT *
 FROM  layoffs_staging;
 
-select *,
-row_number() over(
-partition by 
+SELECT *,
+ROW_NUMBER() OVER(
+PARTITION BY 
 company,location, industry,total_laid_off,percentage_laid_off,`date`,stage, country, funds_raised_millions)
-as row_num
-from layoffs_staging;
+AS row_num
+FROM layoffs_staging;
 
 
 -- Check Duplicates values
-with duplicate_cte as
+WITH duplicate_cte AS
 (
-select *,
+SELECT *,
 row_number() over(
 partition by 
 company,location, industry,total_laid_off,percentage_laid_off,`date`,stage, country, funds_raised_millions)
@@ -44,10 +44,26 @@ select *
 from duplicate_cte
 where row_num > 1;
 
-
-select *
+-- delete error Duplicates values 
+WITH duplicate_cte AS
+(
+SELECT *,
+row_number() over(
+partition by 
+company,location, industry,total_laid_off,percentage_laid_off,`date`,stage, country, funds_raised_millions)
+as row_num
 from layoffs_staging
-where company = 'Casper';
+)
+delete
+from duplicate_cte
+where row_num > 1;
+
+
+
+SELECT *
+FROM layoffs_staging
+WHERE company = 'Casper';
+
 
 
 CREATE TABLE `layoffs_staging2` (
@@ -114,12 +130,109 @@ select DISTINCT industry
 from layoffs_staging2
 order by 1;
 
+select *
+from layoffs_staging2
+WHERE industry like 'crypto%';
 
+update layoffs_staging2
+set industry  = 'crypto'
+WHERE industry like 'crypto%';
 
+select DISTINCT location
+from layoffs_staging2
+ORDER BY 1;
 
+select DISTINCT country
+from layoffs_staging2
+ORDER BY 1;
 
+select *
+from layoffs_staging2
+WHERE country like 'United States%';
 
+update layoffs_staging2
+set country = trim(trailing '.' from country)
+WHERE country like 'United States%';
 
+select `date`,
+str_to_date(`date`,'%m/ %d/ %Y')
+from layoffs_staging2;
 
+update layoffs_staging2
+set `date` = str_to_date(`date`,'%m/ %d/ %Y');
 
+select `date`
+from layoffs_staging2;
 
+alter table layoffs_staging2
+modify column `date` date;
+
+select *
+from layoffs_staging2;
+
+select *
+from layoffs_staging2
+where total_laid_off is null;
+
+select *
+from layoffs_staging2
+where total_laid_off is null
+and percentage_laid_off is null;
+
+update layoffs_staging2
+set industry = null
+where industry = '';
+
+select *
+from layoffs_staging2
+where industry is null
+or industry = '';
+
+select *
+from layoffs_staging2
+where company = 'airbnb';
+
+select *
+from layoffs_staging2
+where company like 'bally%';
+
+select *
+from layoffs_staging2 t1
+join layoffs_staging2 t2
+	on t1.company = t2.company
+    and t1.location = t2.location
+where (t1.industry is null or t1.industry = '')
+and t2.industry is not null;
+
+select t1.industry , t2.industry
+from layoffs_staging2 t1
+join layoffs_staging2 t2
+	on t1.company = t2.company
+    and t1.location = t2.location
+where (t1.industry is null or t1.industry = '')
+and t2.industry is not null;
+
+update layoffs_staging2 t1
+join layoffs_staging2 t2
+	on t1.company = t2.company
+set  t1.industry = t2.industry
+where t1.industry is null
+and t2.industry is not null;
+
+select *
+from layoffs_staging2; 
+
+-- delete the complete null data 
+
+select *
+from layoffs_staging2
+WHERE total_laid_off is null 
+and percentage_laid_off is null;
+
+delete
+from layoffs_staging2
+WHERE total_laid_off is null 
+and percentage_laid_off is null;
+
+alter table layoffs_staging2
+drop column row_num;
